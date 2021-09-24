@@ -1,0 +1,147 @@
+﻿@page
+@inject Microsoft.Extensions.Configuration.IConfiguration configuration
+// that's all  folks .. no DTO  no nhibernate no  angular no vue no whatever lah 
+@{
+    // wee been typing these before
+    var connectionString = configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
+
+    List<PersonModel> personModels = new();
+
+    string error = "";
+
+    // mostly We Prefer ViewBag?.notification but it will confuse new user even tenary not all people used it
+
+    string notification = (ViewBag.notification != null)?ViewBag.notification:"";
+   
+    try
+    {
+        PersonRepository personRepository = new();
+        personModels = personRepository.Read();
+    }
+    catch (Exception ex)
+    {
+        error = ex.Message;
+    }
+}
+
+@if (error.Length > 0)
+{
+    <div> @error</div>
+}
+@if (notification.Length > 0)
+{
+    <div class="alert alert-info"> @notification</div>
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <button type="button" class="btn btn-primary" onclick="refreshMe()">Refresh </button>
+
+            </th>
+            <th><input type="text" id="name" placeholder="Name" class="form-control" /></th>
+            <th><input type="text" id="age" placeholder="Age" class="form-control" /> </th>
+            <th>
+                <button type="button" class="btn btn-primary" onclick="createRecord()">Create </button>
+
+
+            </th>
+        </tr>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Command</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in personModels)
+        {
+            <tr>
+                <td scope="row"> @row.PersonId </td>
+                <td scope="row">
+                    <input type="text" id="@row.PersonId-name" placeholder="Name" value="@row.Name" class="form-control" />
+                </td>
+                <td scope="row">
+                    <input type="text" id="@row.PersonId-age" placeholder="Age" class="form-control" value="@row.Age" />
+
+                </td>
+                <td>
+                    <button type="button" class="btn btn-warning" onclick="updateRecord(@row.PersonId)">Update</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteRecord(@row.PersonId)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var url = "https://localhost:5001/api/values";  // same like those postman address before
+    var home = "@Url.RouteUrl(ViewContext.RouteData.Values)";
+    // you can  just put /Home/PersonModel but if you lazy to copy paste better like this
+    function refreshMe() {
+        window.location.href = home;
+    }
+    function createRecord() {
+        // since jquery out of the box better use it ? angular ? react ? vue
+        // we don't know and don't care much
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType:"application/x-www-form-urlencoded",
+            data: {
+                mode: "create",
+                name: $("#name").val(),
+                age:$("#age").val()
+            }, beforeSend() {
+                console.log("Waiiit waiit");
+            }, success: function (data) {
+                if (data.status) {
+                    window.location.href = home + "?notification=createSuccess";
+                }
+            }, failure: function (xhr) {
+                console.log(xhr.status);
+            }
+        })
+    }
+    function updateRecord(personId) {
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                mode: "update",
+                name: $("#" + personId + "-name").val(),
+                age: $("#" + personId + "-age").val(),
+                personId: personId
+            }, beforeSend() {
+                console.log("Waiiit waiit");
+            }, success: function (data) {
+                if (data.status) {
+                    window.location.href = home + "?notification=updateSuccess";
+                }
+            }, failure: function (xhr) {
+                console.log(xhr.status);
+            }
+        })
+    }
+    function deleteRecord(personId) {
+
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/x-www-form-urlencoded",
+            data: {
+                mode: "delete",
+                personId: personId
+            }, beforeSend() {
+                console.log("Waiiit waiit");
+            }, success: function (data) {
+                if (data.status) {
+                    window.location.href = home + "?notification=deleteSuccess";
+                }
+            }, failure: function (xhr) {
+                console.log(xhr.status);
+            }
+        })
+    }
+</script>

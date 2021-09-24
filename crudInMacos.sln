@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crudInMacos", "crudInMacos\crudInMacos.csproj", "{9B2B1F03-A802-45B1-A588-5AA893BB4E60}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B2B1F03-A802-45B1-A588-5AA893BB4E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B2B1F03-A802-45B1-A588-5AA893BB4E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B2B1F03-A802-45B1-A588-5AA893BB4E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B2B1F03-A802-45B1-A588-5AA893BB4E60}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B4A7014-30B8-4410-ADC9-B7146CDB4095}
+	EndGlobalSection
+EndGlobal
